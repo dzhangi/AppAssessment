@@ -14,10 +14,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
+import com.pk.appassessment.ui.component.LoadImage
+import com.pk.appassessment.ui.util.sendLinkNavHack
 
 @Composable
-fun RecentImagesScreen() {
+fun RecentImagesScreen(
+    onItemClick: (String) -> Unit
+) {
     val viewModel: RecentImagesViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
@@ -26,20 +29,18 @@ fun RecentImagesScreen() {
             Text(text = "Fetch Recent")
         }
 
-        ImageGrid(imageUrls = uiState.urls)
+        ImageGrid(
+            imageUrls = uiState.urls,
+            onItemClick = { onItemClick(it.sendLinkNavHack()) }
+        )
     }
 }
 
 @Composable
-fun LoadImage(imageUrl: String) {
-    AsyncImage(
-        model = imageUrl,
-        contentDescription = "Photo"
-    )
-}
-
-@Composable
-fun ImageGrid(imageUrls: List<String>) {
+fun ImageGrid(
+    imageUrls: List<String>,
+    onItemClick: (String) -> Unit
+) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.padding(4.dp),
@@ -47,7 +48,7 @@ fun ImageGrid(imageUrls: List<String>) {
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         items(imageUrls) { imageUrl ->
-            LoadImage(imageUrl = imageUrl)
+            LoadImage(imageUrl = imageUrl, onClick = onItemClick)
         }
     }
 }
