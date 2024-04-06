@@ -1,13 +1,13 @@
 package com.pk.appassessment.domain
 
-import com.pk.appassessment.data.remote.RecentImagesApi
+import com.pk.appassessment.domain.repo.RecentImagesRepo
 import javax.inject.Inject
 
 class GetRecentImageUrlsUseCase @Inject constructor(
-    private val recentImagesApi: RecentImagesApi
+    private val repo: RecentImagesRepo
 ) {
     suspend operator fun invoke(): List<String> {
-        return recentImagesApi.getRecentPhotos().photos.photo
+        return repo.getRecentImages()
             .map { "https://live.staticflickr.com/${it.server}/${it.id}_${it.secret}_b.jpg" }
             .subList(0, 20)
     }

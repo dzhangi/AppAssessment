@@ -1,5 +1,7 @@
 package com.pk.appassessment.data.remote.model
 
+import com.pk.appassessment.domain.model.PhotoInfo
+
 data class PhotoDto(
     val farm: Int,
     val id: String,
@@ -11,3 +13,11 @@ data class PhotoDto(
     val server: String,
     val title: String
 )
+
+fun PhotoDto.toPhotoInfo(): PhotoInfo {
+    return PhotoInfo(
+        id = this.id,
+        server = this.server,
+        secret = this.secret,
+    )
+}
