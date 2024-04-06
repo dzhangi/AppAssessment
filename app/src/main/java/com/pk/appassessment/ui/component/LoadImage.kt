@@ -7,11 +7,12 @@ import coil.compose.AsyncImage
 
 @Composable
 fun LoadImage(
+    modifier: Modifier = Modifier,
     imageUrl: String,
     onClick: (String) -> Unit = {}
 ) {
     AsyncImage(
-        modifier = Modifier.clickable { onClick(imageUrl) },
+        modifier = modifier.clickable { onClick(imageUrl) },
         model = imageUrl,
         contentDescription = "Photo"
     )

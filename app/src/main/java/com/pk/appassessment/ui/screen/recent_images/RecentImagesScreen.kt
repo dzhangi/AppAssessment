@@ -1,5 +1,6 @@
 package com.pk.appassessment.ui.screen.recent_images
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -11,7 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pk.appassessment.ui.component.LoadImage
@@ -24,12 +29,17 @@ fun RecentImagesScreen(
     val viewModel: RecentImagesViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsState()
 
+    var columnsState by remember { mutableStateOf(2) }
+    columnsState = resolveColumns(LocalConfiguration.current)
+
+
     Column {
         Button(onClick = { viewModel.fetchRecentImages() }) {
             Text(text = "Fetch Recent")
         }
 
         ImageGrid(
+            columns = columnsState,
             imageUrls = uiState.urls,
             onItemClick = { onItemClick(it.sendLinkNavHack()) }
         )
@@ -38,11 +48,12 @@ fun RecentImagesScreen(
 
 @Composable
 fun ImageGrid(
+    columns: Int,
     imageUrls: List<String>,
     onItemClick: (String) -> Unit
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(columns),
         modifier = Modifier.padding(4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
@@ -50,5 +61,12 @@ fun ImageGrid(
         items(imageUrls) { imageUrl ->
             LoadImage(imageUrl = imageUrl, onClick = onItemClick)
         }
+    }
+}
+
+private fun resolveColumns(configuration: Configuration): Int {
+    return when (configuration.orientation) {
+        Configuration.ORIENTATION_LANDSCAPE -> 4
+        else -> 2
     }
 }
