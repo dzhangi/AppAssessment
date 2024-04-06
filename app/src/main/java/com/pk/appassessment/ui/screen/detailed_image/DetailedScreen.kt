@@ -15,6 +15,6 @@ fun DetailedImageScreen() {
 
     LoadImage(
         modifier = Modifier.fillMaxSize(),
-        imageUrl = uiState.imageUrl
+        imageUrl = uiState.imageUrl,
     )
 }
