@@ -80,6 +80,9 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
 
+    //Accompanist
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.34.0")
+
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
